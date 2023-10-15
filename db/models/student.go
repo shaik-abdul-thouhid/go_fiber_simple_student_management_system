@@ -21,7 +21,7 @@ var db, _ = connect.GetDB()
 	};
 */
 type Student struct {
-	UiD     string  `gorm:"primaryKey;<-:create;not null;unique" json:"id"`
+	UiD     string  `gorm:"primaryKey;<-:create;not null;unique;column:student_id" json:"id"`
 	Name    string  `gorm:"not null;" json:"student_name"`
 	Email   string  `gorm:"not null;unique_index;" json:"email_id"`
 	Address *string `gorm:"size:255" json:"student_address,omitempty"`
