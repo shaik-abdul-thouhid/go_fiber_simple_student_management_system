@@ -1,3 +1,4 @@
-/.air.toml
-/build
-/tmp
+.air.toml
+build
+tmp
+*.exe

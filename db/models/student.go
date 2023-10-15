@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go_algo/db/connect"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -21,10 +22,12 @@ var db, _ = connect.GetDB()
 	};
 */
 type Student struct {
-	UiD     string  `gorm:"primaryKey;<-:create;not null;unique;column:student_id" json:"id"`
-	Name    string  `gorm:"not null;" json:"student_name"`
-	Email   string  `gorm:"not null;unique_index;" json:"email_id"`
-	Address *string `gorm:"size:255" json:"student_address,omitempty"`
+	UiD       string    `gorm:"primaryKey;<-:create;not null;unique;column:student_id" json:"id"`
+	Name      string    `gorm:"not null;" json:"student_name"`
+	Email     string    `gorm:"not null;unique_index;" json:"email_id"`
+	Address   *string   `gorm:"size:255" json:"student_address,omitempty"`
+	CreatedAt time.Time `gorm:"autoCreateTime:true" json:"created_at,omitempty"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime:true" json:"updated_at,omitempty"`
 }
 
 func FetchAllStudents() []Student {
@@ -45,7 +48,7 @@ func FetchAllStudents() []Student {
 
 func CreateNewStudent(name string, email string, address *string) {
 
-	returnValue := db.Create(Student{UiD: uuid.New().String(), Name: name, Email: email, Address: address})
+	returnValue := db.Create(Student{UiD: uuid.New().String(), Name: name, Email: email, Address: address, CreatedAt: time.Now(), UpdatedAt: time.Now()})
 
 	fmt.Println(returnValue)
 }

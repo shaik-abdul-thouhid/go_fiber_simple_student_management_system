@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -28,16 +29,18 @@ func main() {
 
 	db.Connect()
 
-	newAddress := "new Address"
-	models.CreateNewStudent("My name is thouhid", "email1@email.com", &newAddress)
-
 	app.Get("/students/:id?", func(c *fiber.Ctx) error {
+		dataMap := make(map[string]any)
+
 		students := models.FetchAllStudents()
 
 		if value := c.Params("id"); value != "" {
+			fmt.Println("id", value)
 			for _, j := range students {
 				if j.UiD == value {
-					return c.JSON(j)
+					dataMap["time"] = time.Now()
+					dataMap["data"] = j
+					return c.JSON(dataMap)
 				}
 			}
 
@@ -47,7 +50,10 @@ func main() {
 			}{status: false, error_message: "id not found"})
 		}
 
-		return c.JSON(students)
+		dataMap["time"] = time.Now()
+		dataMap["data"] = students
+
+		return c.JSON(dataMap)
 	})
 
 	app.Get("/swagger/*", swagger.HandlerDefault)
